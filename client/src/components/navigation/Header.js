@@ -1,41 +1,32 @@
-// import React, { useContext } from "react";
-// import { Link } from "react-router-dom";
-// import GlobalContext from "../context/appContext";
-// import { logout } from "../spotify";
-// import Search from "./SearchOverlay";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-// export const Header = ({ profile }) => {
-//   const gContext = useContext(GlobalContext);
-
-//   return (
-//     <div className="h-20 flex flex-row items-center justify-between w-full border-2 border-green-600">
-//       <img src="./img/logoipsum-logo-43.svg" />
-//       <Link to="/">Search</Link>
-//       <button onClick={logout}>Log Out</button>
-//       {profile && <div>{profile.display_name}</div>}
-//       <button onClick={() => gContext.isSearchOverlay(true)}>ShowSearch</button>
-//     </div>
-//   );
-// };
-
-import { Fragment, useContext } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, SearchCircleIcon } from "@heroicons/react/outline";
-import GlobalContext from "../context/appContext";
-
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
+import { SearchCircleIcon } from "@heroicons/react/outline";
+import GlobalContext from "../../context/appContext";
+import { getCurrentUserProfile, logout } from "../../spotify";
+import { catchErrors } from "../../utils";
+import { Logo } from "./Logo";
+import { Link } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const Header = ({ profile }) => {
+export const Header = () => {
+  const [profile, setProfile] = useState(null);
   const gContext = useContext(GlobalContext);
+  const location = useLocation();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await getCurrentUserProfile();
+      setProfile(data);
+      console.log(data);
+    };
+
+    catchErrors(fetchData());
+  }, []);
 
   return (
     <Disclosure as="nav" className="bg-transparent">
@@ -44,26 +35,27 @@ export const Header = ({ profile }) => {
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-16">
               <div className="flex-1 flex items-stretch justify-start">
-                <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
-                    alt="Workflow"
-                  />
+                <div className="flex-shrink-0 flex items-center  cursor-pointer">
+                  <Link to="/">
+                    <Logo />
+                  </Link>
                 </div>
               </div>
+
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <SearchCircleIcon
-                    className="h-8 w-8"
-                    aria-hidden="true"
-                    onClick={() => gContext.isSearchOverlay(true)}
-                  />
-                </button>
+                {location.pathname !== "/" && (
+                  <button
+                    type="button"
+                    className=" p-1 rounded-full duration-150 transition-all text-gray-200 hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  >
+                    <span className="sr-only">View notifications</span>
+                    <SearchCircleIcon
+                      className="h-7 w-7 "
+                      aria-hidden="true"
+                      onClick={() => gContext.isSearchOverlay(true)}
+                    />
+                  </button>
+                )}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
@@ -72,7 +64,7 @@ export const Header = ({ profile }) => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile ? profile.images[0].url : null}
                         alt=""
                       />
                     </Menu.Button>
@@ -96,7 +88,10 @@ export const Header = ({ profile }) => {
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Your Profile
+                            Signed in as{" "}
+                            <span className="font-bold">
+                              {profile.display_name}
+                            </span>
                           </a>
                         )}
                       </Menu.Item>
@@ -104,19 +99,7 @@ export const Header = ({ profile }) => {
                         {({ active }) => (
                           <a
                             href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
+                            onClick={logout}
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

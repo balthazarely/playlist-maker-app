@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { accessToken, getCurrentUserProfile } from "./spotify";
 import { catchErrors } from "./utils";
 import {
@@ -7,13 +7,17 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { Layout } from "./components/Layout";
+import { Layout } from "./components/wrappers/Layout";
 import { Login, Profile } from "./pages";
-import { Header } from "./components/Header";
+import { Header } from "./components/navigation/Header";
 import { Playlist } from "./pages/Playlist";
 import "./app.css";
-import { GlobalProvider } from "./context/appContext";
+import GlobalContext, { GlobalProvider } from "./context/appContext";
 import { motion, AnimatePresence } from "framer-motion/dist/es/index";
+import { Footer } from "./components/navigation/Footer";
+import { Navbar } from "./components/navigation/Navbar";
+import SearchOverlay from "./components/pageElements/SearchOverlay";
+import { MyMusic } from "./pages/MyMusic";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -27,6 +31,7 @@ function App() {
   const location = useLocation();
   const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
+  const gContext = useContext(GlobalContext);
 
   useEffect(() => {
     setToken(accessToken);
@@ -47,11 +52,18 @@ function App() {
           ) : (
             <>
               <ScrollToTop />
-              <Header profile={profile} />
-              <Switch location={location} key={location.pathname}>
-                <Route path="/playlist/:id" component={Playlist} />
-                <Route path="/" component={Profile} />
-              </Switch>
+              <div class="flex flex-col h-screen justify-between">
+                <Navbar profile={profile} />
+                <div className="mb-auto">
+                  <Switch location={location} key={location.pathname}>
+                    <Route path="/playlist/:id" component={Playlist} />
+                    <Route path="/artists" component={MyMusic} />
+                    <Route path="/" component={Profile} />
+                  </Switch>
+                </div>
+
+                <Footer />
+              </div>
             </>
           )}
         </Layout>

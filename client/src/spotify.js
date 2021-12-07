@@ -130,98 +130,94 @@ export const getTopArtists = (time_range = "short_term") => {
   return axios.get(`/me/top/artists?time_range=${time_range}`);
 };
 
-export const createPlaylist = (userID) => {
+async function getUser() {
+  let response = await getCurrentUserProfile();
+  console.log(response.data.id);
+  return response.data.id;
+}
+
+export const createPlaylist = async (song, songUris) => {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };
-  return fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
-    method: "POST",
-    headers: headers,
-    body: JSON.stringify({ name: "THIS IS ONLY A TEST" }),
-  }).then(
-    (response) => {
-      if (response.ok) {
-        return response.json();
+
+  try {
+    let userId = await getUser();
+    let dataFetch = await fetch(
+      `https://api.spotify.com/v1/users/${userId}/playlists`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ name: `Songs inspired by ${song.name}` }),
       }
-      throw new Error("Request failed!");
-    },
-    (networkError) => {
-      console.log(networkError.message);
-    }
-  );
+    );
+    let data = await dataFetch.json();
+    let playlist = await fetch(
+      `https://api.spotify.com/v1/users/${userId}/playlists/${data.id}/tracks`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ uris: songUris }),
+      }
+    );
+  } catch (err) {
+    console.log(
+      "hmm, looks like the developer messed up here... or the api changed"
+    );
+  }
 };
 
-export const searchForArtist = (searchQuery) => {
+export const searchForArtist = async (searchQuery) => {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };
-  return fetch(
-    `https://api.spotify.com/v1/search?q=${searchQuery}&type=track%2Cartist&market=ES&limit=6`,
-
-    {
-      headers: headers,
-    }
-  )
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Request failed!");
-      },
-      (networkError) => {
-        console.log(networkError.message);
+  try {
+    let response = await fetch(
+      `https://api.spotify.com/v1/search?q=${searchQuery}&type=track%2Cartist&market=ES&limit=6`,
+      {
+        headers: headers,
       }
-    )
-    .then((jsonResponse) => {
-      return jsonResponse;
-    });
+    );
+    return response.json();
+  } catch (err) {
+    console.log("error");
+  }
 };
 
-export const getSong = (songID) => {
+export const getSong = async (songID) => {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };
-  return fetch(
-    `https://api.spotify.com/v1/tracks/${songID}`,
+  try {
+    let response = await fetch(
+      `https://api.spotify.com/v1/tracks/${songID}`,
 
-    {
-      headers: headers,
-    }
-  )
-    .then(
-      (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Request failed!");
-      },
-      (networkError) => {
-        console.log(networkError.message);
+      {
+        headers: headers,
       }
-    )
-    .then((jsonResponse) => {
-      return jsonResponse;
-    });
+    );
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const findRecommendedSongs = (songId) => {
+export const findRecommendedSongs = async (songId) => {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };
-  return fetch(
-    `https://api.spotify.com/v1/recommendations?seed_tracks=${songId}`,
-    // &target_energy=1
-    { headers: headers }
-  ).then(
-    (response) => {
-      if (response.ok) {
-        return response.json();
+
+  try {
+    let response = await fetch(
+      `https://api.spotify.com/v1/recommendations?seed_tracks=${songId}&limit=50`,
+
+      {
+        headers: headers,
       }
-      throw new Error("Request failed!");
-    },
-    (networkError) => {
-      console.log(networkError.message);
-    }
-  );
+    );
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
 };

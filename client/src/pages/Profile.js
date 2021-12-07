@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { catchErrors } from "../utils";
 import {
   getCurrentUserPlaylists,
@@ -6,8 +6,10 @@ import {
   getTopArtists,
   searchForArtist,
 } from "../spotify";
-import { SearchInput } from "../components/SearchInput";
-import { PageWrapper } from "../components/PageWrapper";
+import { SearchInput } from "../components/elements/inputs/SearchInput";
+import { PageWrapper } from "../components/wrappers/PageWrapper";
+import GlobalContext from "../context/appContext";
+import { AnimatePresence, motion } from "framer-motion/dist/es/index";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -16,6 +18,7 @@ const Profile = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
+  const gContext = useContext(GlobalContext);
 
   const setUserInput = (query) => {
     setSearchQuery(query);
@@ -25,6 +28,7 @@ const Profile = () => {
     const fetchData = async () => {
       const { data } = await getCurrentUserProfile();
       setProfile(data);
+      gContext.logInUser(data);
 
       const userPlaylists = await getCurrentUserPlaylists();
       setPlaylists(userPlaylists.data);
@@ -41,6 +45,7 @@ const Profile = () => {
       setSearchResults(null);
       return;
     }
+
     const callSearchService = async () => {
       if (searchQuery.length > 2) {
         const { tracks } = await searchForArtist(searchQuery);
@@ -63,14 +68,21 @@ const Profile = () => {
   return (
     <div className="">
       {profile && (
-        <PageWrapper>
-          <SearchInput
-            setUserInput={setUserInput}
-            searchQuery={searchQuery}
-            searchResults={searchResults}
-            loading={loading}
-          />
-        </PageWrapper>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          // className="fixed top-0 w-full h-screen bg-base-200 bg-opacity-90 "
+        >
+          <PageWrapper>
+            <SearchInput
+              setUserInput={setUserInput}
+              searchQuery={searchQuery}
+              searchResults={searchResults}
+              loading={loading}
+            />
+          </PageWrapper>
+        </motion.div>
       )}
       {/* <StyledHeader type="user">
             <div className="header__inner">

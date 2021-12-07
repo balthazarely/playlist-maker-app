@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import SearchResultCard from "./SearchResultCard";
+import SearchResultCard from "../cards/SearchResultCard";
 import { SearchCircleIcon } from "@heroicons/react/solid";
 
 export const SearchInput = ({

@@ -17,3 +17,9 @@ export function millisToMinutesAndSeconds(millis) {
   var seconds = ((millis % 60000) / 1000).toFixed(0);
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
+
+export function listNamesFunction(people) {
+  const names = people.map(({ name }) => name);
+  const finalName = names.pop();
+  return names.length ? names.join(", ") + " & " + finalName : finalName;
+}

@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import GlobalContext from "../context/appContext";
-import { millisToMinutesAndSeconds } from "../utils";
+import GlobalContext from "../../../context/appContext";
+import { listNamesFunction, millisToMinutesAndSeconds } from "../../../utils";
 import { HiArrowRight } from "react-icons/hi";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 export const PlaylistResultsCard = ({ song }) => {
   const history = useHistory();
@@ -26,25 +27,38 @@ export const PlaylistResultsCard = ({ song }) => {
               {song.name}
             </div>
             <div className="truncate font-base text-xs text-gray-300 mt-1">
-              {song.artists.map((artist, i) => (
-                <>
-                  <span>{artist.name} </span>
-                </>
-              ))}
+              {listNamesFunction(song.artists)}
             </div>
           </div>
         </div>
         <div className="col-span-1 flex items-center justify-end   pr-2">
-          <button
-            onClick={() => navigateToPlaylistPage(song.id)}
-            class="btn btn-primary btn-outline btn-xs  font-base opacity-0 group-hover:opacity-100 sm:inline-block hidden  "
-          >
-            Find Similar
+          <button class="btn btn-primary btn-ghost btn-xs  font-base   ">
+            <div class="dropdown dropdown-end">
+              <HiOutlineDotsHorizontal tabindex="0" className=" w-6 h-6" />
+              <ul
+                tabindex="0"
+                class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a>
+                    <button
+                      className="text-md font-bold uppercase  tracking-wide"
+                      onClick={() => navigateToPlaylistPage(song.id)}
+                    >
+                      Find Similar Songs
+                    </button>
+                  </a>
+                </li>
+                <li>
+                  <a target="BLANK" href={song.external_urls.spotify}>
+                    <button className="text-md font-bold uppercase  tracking-wide">
+                      Open in Spotify
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </button>
-          <HiArrowRight
-            onClick={() => navigateToPlaylistPage(song.id)}
-            className=" text-gray-400 inline-block sm:hidden cursor-pointer group-hover:text-primary "
-          />
         </div>
       </div>
       {/* <div className="group flex rounded-lg duration-200 transition-all  shadow-2xl flex-row justify-between text-sm bg-base-100 p-2 cursor-pointer hover:bg-base-100 ">

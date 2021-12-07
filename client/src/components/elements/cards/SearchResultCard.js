@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { listNamesFunction } from "../../../utils";
 
 export default function SearchResultCard({ song, largeText }) {
   const history = useHistory();
@@ -18,7 +19,7 @@ export default function SearchResultCard({ song, largeText }) {
           largeText ? "text-md" : "text-sm"
         } `}
       >
-        {names}
+        {listNamesFunction(song.artists)} - {song.name}
       </div>
     </div>
   );
