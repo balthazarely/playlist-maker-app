@@ -7,7 +7,7 @@ export const PageWrapper = ({ children }) => {
   const gContext = useContext(GlobalContext);
 
   return (
-    <div className=" flex flex-col items-center container mx-auto max-w-2xl mt-10 mb-10 px-2 ">
+    <div className=" flex flex-col items-center container mx-auto max-w-2xl mt-10 mb-10 px-2 h-full min-h-screen ">
       <>{children}</>
       <AnimatePresence>
         {gContext.showSearchOverlay && (

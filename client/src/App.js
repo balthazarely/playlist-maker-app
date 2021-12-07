@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import { Layout } from "./components/wrappers/Layout";
 import { Login, Profile } from "./pages";
-import { Header } from "./components/navigation/Header";
 import { Playlist } from "./pages/Playlist";
 import "./app.css";
 import GlobalContext, { GlobalProvider } from "./context/appContext";
@@ -52,18 +51,20 @@ function App() {
           ) : (
             <>
               <ScrollToTop />
-              <div class="flex flex-col h-screen justify-between">
-                <Navbar profile={profile} />
-                <div className="mb-auto">
-                  <Switch location={location} key={location.pathname}>
-                    <Route path="/playlist/:id" component={Playlist} />
-                    <Route path="/artists" component={MyMusic} />
-                    <Route path="/" component={Profile} />
-                  </Switch>
-                </div>
+              {/* <div class="flex flex-col h-screen justify-between"> */}
+              <Navbar profile={profile} />
+              {/* <div className="mb-auto"> */}
+              <AnimatePresence exitBeforeEnter initial={false}>
+                <Switch location={location} key={location.pathname}>
+                  <Route path="/playlist/:id" component={Playlist} />
+                  <Route path="/artists" component={MyMusic} />
+                  <Route path="/" component={Profile} />
+                </Switch>
+              </AnimatePresence>
+              {/* </div> */}
 
-                <Footer />
-              </div>
+              {/* <Footer /> */}
+              {/* </div> */}
             </>
           )}
         </Layout>

@@ -1,7 +1,7 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { catchErrors } from "../../utils";
 import GlobalContext from "../../context/appContext";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Logo } from "./Logo";
 import { getCurrentUserProfile, logout } from "../../spotify";
@@ -28,13 +28,15 @@ export const Navbar = () => {
   return (
     <div className="navbar mb-2 relative flex bg-transparent text-neutral-content container mx-auto max-w-7xl">
       <div className="flex-1 px-2 mx-2 ">
-        <Logo />
+        <Link to={"/"}>
+          <Logo />
+        </Link>
       </div>
 
       <div className="flex-1 justify-end ">
         <button className="btn btn-ghost">My Artists</button>
 
-        <div className="">
+        {location.pathname !== "/" && (
           <button
             className="btn btn-square btn-ghost -mr-2"
             onClick={() => gContext.isSearchOverlay(true)}
@@ -53,16 +55,22 @@ export const Navbar = () => {
               ></path>
             </svg>
           </button>
-        </div>
+        )}
+
         <Menu as="div" className="ml-3 relative">
           <div>
-            <Menu.Button className="bg-gray-800 flex text-sm rounded-full hover:bg-base-300  ">
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-10 h-10 m-1 rounded-full"
-                src={profile ? profile.images[0].url : null}
-                alt=""
-              />
+            <Menu.Button className="bg-gray-800 m-1 flex justify-center items-center text-sm rounded-full hover:bg-base-300  ">
+              {profile ? (
+                <img
+                  className="w-10 h-10 rounded-full "
+                  src={profile.images[0].url}
+                  alt="profile__pic"
+                />
+              ) : (
+                <div className="relative h-10 w-10 animate-spin rounded-full bg-gradient-to-r from-primary to-base-100   ">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8  bg-base-100  rounded-full "></div>
+                </div>
+              )}
             </Menu.Button>
           </div>
           <Transition

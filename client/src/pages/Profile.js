@@ -67,13 +67,13 @@ const Profile = () => {
 
   return (
     <div className="">
-      {profile && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
-          // className="fixed top-0 w-full h-screen bg-base-200 bg-opacity-90 "
-        >
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 20, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {profile && (
           <PageWrapper>
             <SearchInput
               setUserInput={setUserInput}
@@ -82,42 +82,8 @@ const Profile = () => {
               loading={loading}
             />
           </PageWrapper>
-        </motion.div>
-      )}
-      {/* <StyledHeader type="user">
-            <div className="header__inner">
-              {profile.images.length && profile.images[0].url && (
-                <img
-                  className="header__img"
-                  src={profile.images[0].url}
-                  alt="Avatar"
-                />
-              )}
-              <div>
-                <div className="header__overline">Profile</div>
-                <h1 className="header__name">{profile.display_name}</h1>
-                <p className="header__meta">
-                  {playlists && (
-                    <span>
-                      {playlists.total} Playlist
-                      {playlists.total !== 1 ? "s" : ""}
-                    </span>
-                  )}
-                  <span>
-                    {profile.followers.total} Follower
-                    {profile.followers.total !== 1 ? "s" : ""}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </StyledHeader> */}
-      {/* <div>
-            {topArtists && (
-              <main>
-                <ArtistsGrid artists={topArtists.items.slice(0, 10)} />
-              </main>
-            )}
-          </div> */}
+        )}
+      </motion.div>
     </div>
   );
 };
