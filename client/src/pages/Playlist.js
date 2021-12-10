@@ -5,22 +5,9 @@ import { PageHeader } from "../components/pageElements/PageHeader";
 import { PageWrapper } from "../components/wrappers/PageWrapper";
 import { PlaylistResultsCard } from "../components/elements/cards/PlaylistResultsCard";
 import GlobalContext from "../context/appContext";
-import {
-  createPlaylist,
-  findRecommendedSongs,
-  getCurrentUserProfile,
-  getSong,
-} from "../spotify";
-import { Listbox, Transition } from "@headlessui/react";
-import { RiPlayListFill } from "react-icons/ri";
-
+import { createPlaylist, findRecommendedSongs, getSong } from "../spotify";
 import { catchErrors } from "../utils";
-import { AnimatePresence, motion } from "framer-motion/dist/es/index";
-import SearchOverlay from "../components/pageElements/SearchOverlay";
-import PlayListOptionMenu from "../components/elements/menus/PlaylistOptionMenu";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { AdvancedSearch } from "../components/AdvancedSearch";
-import { HiBadgeCheck } from "react-icons/hi";
+import { motion } from "framer-motion/dist/es/index";
 import { CreatePlaylistModal } from "../components/pageElements/CreatePlaylistModal";
 import { MakePlaylistButton } from "../components/elements/buttons/MakePlaylistButton";
 import { PageLoading } from "../components/pageElements/PageLoading";
@@ -53,9 +40,20 @@ export const Playlist = () => {
   const gContext = useContext(GlobalContext);
 
   useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    // window.scrollTo(0, 0);
     gContext.isLoading(true);
     const fetchData = async () => {
       const data = await getSong(id);
+
       console.log(data);
       setSong(data);
     };
@@ -66,6 +64,7 @@ export const Playlist = () => {
     const fetchData = async () => {
       const { tracks } = await findRecommendedSongs(id);
       setSimilarSongs(tracks);
+      console.log(tracks);
       setSimilarSongsUri(tracks.map((song) => song.uri));
       gContext.isLoading(false);
     };
@@ -87,8 +86,9 @@ export const Playlist = () => {
 
   return (
     <PageWrapper>
-      {!gContext.loading ? (
+      {!gContext.loading && (
         <motion.div
+          className="w-full"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 20, opacity: 0 }}
@@ -121,8 +121,17 @@ export const Playlist = () => {
             </motion.div>
           )}
         </motion.div>
-      ) : (
-        <PageLoading />
+      )}
+      {gContext.loading && (
+        <motion.div
+          className="w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <PageLoading />
+        </motion.div>
       )}
       <div id="my-modal" class={`modal ${modalOpen && "modal-open"}`}>
         <CreatePlaylistModal closeModal={closeModal} modalOpen={modalOpen} />

@@ -35,6 +35,7 @@ app.get("/login", (req, res) => {
     "user-top-read",
     "playlist-modify-private",
     "playlist-modify-public",
+    "streaming",
   ].join(" ");
 
   const queryParams = querystring.stringify({

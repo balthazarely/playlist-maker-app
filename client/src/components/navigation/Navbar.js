@@ -27,15 +27,18 @@ export const Navbar = () => {
 
   return (
     <div className="navbar mb-2 relative flex bg-transparent text-neutral-content container mx-auto max-w-7xl">
-      <div className="flex-1 px-2 mx-2 ">
+      <div className="flex-1  ">
         <Link to={"/"}>
           <Logo />
         </Link>
       </div>
 
       <div className="flex-1 justify-end ">
-        <button className="btn btn-ghost">My Artists</button>
-
+        <Link to="/my-top-songs">
+          <button className="btn b btn-xs btn-outline ">
+            My&nbsp;Top&nbsp;Songs
+          </button>
+        </Link>
         {location.pathname !== "/" && (
           <button
             className="btn btn-square btn-ghost -mr-2"
@@ -57,7 +60,7 @@ export const Navbar = () => {
           </button>
         )}
 
-        <Menu as="div" className="ml-3 relative">
+        <Menu as="div" className="ml-3 relative pr-2 mr-2">
           <div>
             <Menu.Button className="bg-gray-800 m-1 flex justify-center items-center text-sm rounded-full hover:bg-base-300  ">
               {profile ? (

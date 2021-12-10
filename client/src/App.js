@@ -50,14 +50,14 @@ function App() {
             <Login />
           ) : (
             <>
-              <ScrollToTop />
+              {/* <ScrollToTop /> */}
               {/* <div class="flex flex-col h-screen justify-between"> */}
               <Navbar profile={profile} />
               {/* <div className="mb-auto"> */}
               <AnimatePresence exitBeforeEnter initial={false}>
                 <Switch location={location} key={location.pathname}>
                   <Route path="/playlist/:id" component={Playlist} />
-                  <Route path="/artists" component={MyMusic} />
+                  <Route path="/my-top-songs" component={MyMusic} />
                   <Route path="/" component={Profile} />
                 </Switch>
               </AnimatePresence>
