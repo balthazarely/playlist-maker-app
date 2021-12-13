@@ -52,7 +52,7 @@ function App() {
             <>
               {/* <ScrollToTop /> */}
               {/* <div class="flex flex-col h-screen justify-between"> */}
-              <Navbar profile={profile} />
+              {/* <Navbar profile={profile} /> */}
               {/* <div className="mb-auto"> */}
               <AnimatePresence exitBeforeEnter initial={false}>
                 <Switch location={location} key={location.pathname}>
