@@ -4,9 +4,6 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      // fontFamily: {
-      //   Rampart: ["Inter", "san serif"],
-      // },
       backgroundImage: {
         "hero-pattern":
           "linear-gradient(to bottom, rgba(42, 58, 84, 0.9), rgba(30, 41, 59, 1)), url('../src/img/guitar2.jpg')",
