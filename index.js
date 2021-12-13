@@ -4,8 +4,12 @@ const querystring = require("querystring");
 const app = epxress();
 const axios = require("axios");
 <<<<<<< HEAD
+<<<<<<< HEAD
 // const port = 8888;
 const path = require("path");
+=======
+const port = 8888;
+>>>>>>> parent of 02ce0d3 (sup)
 =======
 const port = 8888;
 >>>>>>> parent of 02ce0d3 (sup)
@@ -84,7 +88,11 @@ app.get("/callback", (req, res) => {
         });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         res.redirect(`${FRONTEND_URI}?${queryParams}`);
+=======
+        res.redirect(`http://localhost:3000/?${queryParams}`);
+>>>>>>> parent of 02ce0d3 (sup)
 =======
         res.redirect(`http://localhost:3000/?${queryParams}`);
 >>>>>>> parent of 02ce0d3 (sup)
@@ -123,12 +131,17 @@ app.get("/refresh_token", (req, res) => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
 });
 
 app.listen(PORT, () => {
   console.log(`express app is listening on http:localhost:${PORT}`);
+=======
+app.listen(port, () => {
+  console.log(`express app is listening on localhost:${port}`);
+>>>>>>> parent of 02ce0d3 (sup)
 =======
 app.listen(port, () => {
   console.log(`express app is listening on localhost:${port}`);
