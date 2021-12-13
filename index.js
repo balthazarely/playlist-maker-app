@@ -3,6 +3,7 @@ const epxress = require("express");
 const querystring = require("querystring");
 const app = epxress();
 const axios = require("axios");
+// const port = 8888;
 const path = require("path");
 
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -82,7 +83,7 @@ app.get("/callback", (req, res) => {
           expires_in,
         });
 
-        res.redirect(`${FRONTEND_URI}/?${queryParams}`);
+        res.redirect(`${FRONTEND_URI}?${queryParams}`);
       } else {
         res.redirect(`/?${querystring.stringify({ error: "invalid_token" })}`);
       }
