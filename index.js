@@ -3,16 +3,7 @@ const epxress = require("express");
 const querystring = require("querystring");
 const app = epxress();
 const axios = require("axios");
-<<<<<<< HEAD
-<<<<<<< HEAD
-// const port = 8888;
-const path = require("path");
-=======
 const port = 8888;
->>>>>>> parent of 02ce0d3 (sup)
-=======
-const port = 8888;
->>>>>>> parent of 02ce0d3 (sup)
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -87,15 +78,7 @@ app.get("/callback", (req, res) => {
           expires_in,
         });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        res.redirect(`${FRONTEND_URI}?${queryParams}`);
-=======
         res.redirect(`http://localhost:3000/?${queryParams}`);
->>>>>>> parent of 02ce0d3 (sup)
-=======
-        res.redirect(`http://localhost:3000/?${queryParams}`);
->>>>>>> parent of 02ce0d3 (sup)
       } else {
         res.redirect(`/?${querystring.stringify({ error: "invalid_token" })}`);
       }
@@ -130,20 +113,6 @@ app.get("/refresh_token", (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-});
-
-app.listen(PORT, () => {
-  console.log(`express app is listening on http:localhost:${PORT}`);
-=======
 app.listen(port, () => {
   console.log(`express app is listening on localhost:${port}`);
->>>>>>> parent of 02ce0d3 (sup)
-=======
-app.listen(port, () => {
-  console.log(`express app is listening on localhost:${port}`);
->>>>>>> parent of 02ce0d3 (sup)
 });
